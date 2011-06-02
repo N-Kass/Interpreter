@@ -19,6 +19,6 @@ public class SyntaxException extends Exception {
 	
 	public String toString() {
 		return "Syntax error at position " + this.position 
-			 + " with message: \"" + this.error + "\".";
+			 + ": \"" + this.error + "\"";
 	}
 }

@@ -8,14 +8,16 @@ public class Interpreter {
 				"/* nested /*comment*/");
 		try {
 			scanner.scan();
+			
 			System.out.println(scanner.code);
+			
 			System.out.println("Tokens: ");
 			for(int i = 0; i < scanner.tokens.size(); i++) {
-				System.out.println("Type: '" + scanner.tokens.get(i).getType().toString() 
-							     + "'. Value: '" + ((String)scanner.tokens.get(i).getValue()) + "'.");
+				System.out.println("Type: '" + scanner.tokens.get(i).getType().toString() + 
+						"'. Value: '" + ((String)scanner.tokens.get(i).getValue()) + "'.");
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (SyntaxException e) {
+			System.out.println(e);
 		}
 	}
 }

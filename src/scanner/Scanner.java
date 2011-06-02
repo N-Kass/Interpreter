@@ -22,9 +22,9 @@ public class Scanner {
 	 * removes comments
 	 * 
 	 * @return ArrayList List of tokens
-	 * @throws Exception
+	 * @throws SyntaxException
 	 */
-	public void scan() throws Exception {
+	public void scan() throws SyntaxException {
 		// Loop over all code and extract tokens
 		char c;
 		for(this.pointer = 0; this.pointer < this.code.length()-1; this.pointer++) {
@@ -82,8 +82,8 @@ public class Scanner {
 		 * end of string.
 		 */
 		int startPos = this.pointer;
-		while(((this.code.charAt(this.pointer) != '"'))
-		   && (this.pointer < this.code.length())) {
+		while((this.pointer < this.code.length()) && 
+			  ((this.code.charAt(this.pointer) != '"'))) {
 			str += this.code.charAt(this.pointer);
 			
 			this.pointer++;
