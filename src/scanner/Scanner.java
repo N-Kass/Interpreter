@@ -31,8 +31,8 @@ public class Scanner {
 			this.skipWhitespace();
 			
 			c = this.code.charAt(this.pointer);
-			if((c >= '0') && (c <= '9')) {
-				this.parseNumber();
+			if(Character.isDigit(c) || c == '-') {
+				this.parseFloat();
 			} else
 			if(c == '"') {
 				this.parseString();
@@ -103,6 +103,10 @@ public class Scanner {
 		this.tokens.add(new Token(TokenType.Code, code));
 	}
 
+	/**
+	 * Parse string literal
+	 * @throws SyntaxException If no closing '"' is found.
+	 */
 	private void parseString() throws SyntaxException {
 		if(this.code.charAt(this.pointer) != '"') {
 			return;
@@ -130,8 +134,38 @@ public class Scanner {
 		this.tokens.add(new Token(TokenType.String, str));
 	}
 
-	private void parseNumber() {
+	private void parseFloat() {
+		if(!Character.isDigit(this.code.charAt(this.pointer)) && 
+		   this.code.charAt(this.pointer) != '-') {
+			return;
+		}
 		
+		String number = "";
+		
+		if(this.code.charAt(this.pointer) == '-') {
+			number += "-";
+			this.pointer++;
+		}
+		
+		while(Character.isDigit(this.code.charAt(this.pointer))) {
+			number += this.code.charAt(this.pointer);
+			this.pointer++;
+		}
+		
+		if(this.code.charAt(this.pointer) == '.') {
+			this.pointer++;
+			number += ".";
+			while(Character.isDigit(this.code.charAt(this.pointer))) {
+				number += this.code.charAt(this.pointer);
+				this.pointer++;
+			}
+		}
+		this.pointer--;
+		
+		try {
+			float fNumber = Float.parseFloat(number);
+			this.tokens.add(new Token(TokenType.Number, fNumber));
+		} catch(NumberFormatException e) {}
 	}
 
 	/**
