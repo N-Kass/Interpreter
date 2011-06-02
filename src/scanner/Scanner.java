@@ -27,7 +27,7 @@ public class Scanner {
 	public void scan() throws SyntaxException {
 		// Loop over all code and extract tokens
 		char c;
-		for(this.pointer = 0; this.pointer < this.code.length()-1; this.pointer++) {
+		for(this.pointer = 0; this.pointer < this.code.length(); this.pointer++) {
 			this.skipWhitespace();
 			
 			c = this.code.charAt(this.pointer);
@@ -45,8 +45,14 @@ public class Scanner {
 			} else
 			if(c == ']') {
 				this.tokens.add(new Token(TokenType.CloseSquareBracket));
-			}
-			if((c == '/') && this.code.charAt(this.pointer+1) == '*') {
+			} else
+			if(c == '(') {
+				this.tokens.add(new Token(TokenType.OpenParen));
+			} else
+			if(c == ')') {
+				this.tokens.add(new Token(TokenType.CloseParen));
+			} else
+				if((c == '/') && (this.code.charAt(this.pointer+1) == '*')) {
 				this.skipComment();
 			}
 			else {
@@ -55,15 +61,32 @@ public class Scanner {
 		}
 	}
 	
-	private void skipComment() {
+	private void skipComment() throws SyntaxException {
+		// If no comment, return
+		if((this.code.charAt(this.pointer) != '/') ||
+		   (this.code.charAt(this.pointer+1) != '*')) {
+			return;
+		}
 		
+		int pos = this.code.indexOf("*/", this.pointer+2);
+		if(pos == -1) {
+			throw new SyntaxException(this.pointer, "Unclosed comment.");
+		}
+		this.pointer = pos+1;
 	}
 
 	/**
 	 * Parse functions and variables
 	 */
 	private void parseLiteral() {
+		String lit = "";
+		while(Character.isLetterOrDigit(this.code.charAt(this.pointer))) {
+			lit += this.code.charAt(this.pointer);
+			this.pointer++;
+		}
+		this.pointer--;
 		
+		this.tokens.add(new Token(TokenType.Literal, lit));
 	}
 	
 	private void parseCode() throws SyntaxException {

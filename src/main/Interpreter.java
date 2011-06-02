@@ -4,8 +4,7 @@ import scanner.Scanner;
 
 public class Interpreter {
 	public static void main(String[] args) {
-		Scanner scanner = new Scanner("Hello [\"Hello, world!\" 5.23 -2.33 9 { print(\"Code\") }] " +
-				"/* nested /*comment*/");
+		Scanner scanner = new Scanner("set(\"fact\" func([n] { /* If n is smaller than 2, return 1. Else, return n * fact(n - 1) */ ret(if(lt(n 2) func([] { ret(1) }) func([] { ret(mul(n sub(n 1))) }))) })) print(fact(20))");
 		try {
 			scanner.scan();
 			
