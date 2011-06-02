@@ -8,12 +8,10 @@ public class Interpreter {
 		try {
 			scanner.scan();
 			
-			System.out.println(scanner.code);
-			
 			System.out.println("Tokens: ");
-			for(int i = 0; i < scanner.tokens.size(); i++) {
-				System.out.println("Type: '" + scanner.tokens.get(i).getType().toString() + 
-						"'. Value: '" + scanner.tokens.get(i).getValue() + "'.");
+			for(int i = 0; i < scanner.getTokens().size(); i++) {
+				System.out.println("Type: '" + scanner.getTokens().get(i).getType().toString() + 
+						"'. Value: '" + scanner.getTokens().get(i).getValue() + "'.");
 			}
 		} catch (SyntaxException e) {
 			System.out.println(e);

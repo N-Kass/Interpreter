@@ -4,16 +4,19 @@ import java.util.ArrayList;
 import main.SyntaxException;
 
 public class Scanner {
-	// Public for testing
-	public String code;
+	private String code;
 	private int pointer;
-	public ArrayList<Token> tokens;
+	private ArrayList<Token> tokens;
 	
 	public Scanner(String code) {
 		this.code = code;
 		this.tokens = new ArrayList<Token>();
 	}
 	
+	public ArrayList<Token> getTokens() {
+		return this.tokens;
+	}
+
 	/**
 	 * Scans string for tokens
 	 * 
