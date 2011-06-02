@@ -4,7 +4,7 @@ import scanner.Scanner;
 
 public class Interpreter {
 	public static void main(String[] args) {
-		Scanner scanner = new Scanner("Hello [\"Hello, world!\" \"Hi again!\"] " +
+		Scanner scanner = new Scanner("Hello [\"Hello, world!\" { print(\"Code\") }] " +
 				"/* nested /*comment*/");
 		try {
 			scanner.scan();

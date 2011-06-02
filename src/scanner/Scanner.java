@@ -28,7 +28,7 @@ public class Scanner {
 		// Loop over all code and extract tokens
 		char c;
 		for(this.pointer = 0; this.pointer < this.code.length()-1; this.pointer++) {
-			this.skipSpaces();
+			this.skipWhitespace();
 			
 			c = this.code.charAt(this.pointer);
 			if((c >= '0') && (c <= '9')) {
@@ -66,8 +66,41 @@ public class Scanner {
 		
 	}
 	
-	private void parseCode() {
+	private void parseCode() throws SyntaxException {
+		if(this.code.charAt(this.pointer) != '{') {
+			return;
+		}
+		this.pointer++;
 		
+		String code = "";
+		/*
+		 * Find matching '}' tag.
+		 */
+		int startPos = this.pointer;
+		int depth = 1;
+		char c;
+		while((this.pointer < this.code.length()) && 
+			  (depth > 0)) {
+			c = this.code.charAt(this.pointer);
+			if(c == '}') {
+				depth--;
+			} else
+			if(c == '{') {
+				depth++;
+			}
+			
+			if(depth > 0) {
+				code += this.code.charAt(this.pointer);
+				this.pointer++;
+			}
+		}
+		
+		// If no matching '}' found.
+		if(this.pointer == this.code.length()) {
+			throw new SyntaxException(startPos, "Code literal not closed.");
+		}
+		
+		this.tokens.add(new Token(TokenType.Code, code));
 	}
 
 	private void parseString() throws SyntaxException {
@@ -91,7 +124,7 @@ public class Scanner {
 		
 		// If no matching '"' found.
 		if(this.pointer == this.code.length()) {
-			throw new SyntaxException(startPos, "String not closed.");
+			throw new SyntaxException(startPos, "String literal not closed.");
 		}
 		
 		this.tokens.add(new Token(TokenType.String, str));
@@ -102,10 +135,10 @@ public class Scanner {
 	}
 
 	/**
-	 * Moves pointer to skip spaces
+	 * Moves pointer to skip whitespace
 	 */
-	private void skipSpaces() {
-		while(this.code.charAt(this.pointer) == ' ') {
+	private void skipWhitespace() {
+		while(Character.isWhitespace(this.code.charAt(this.pointer))) {
 			this.pointer++;
 		}
 	}
